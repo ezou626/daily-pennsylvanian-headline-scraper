@@ -31,14 +31,14 @@ def scrape_data_point():
         children = most_read_section.findChildren("div" , recursive=False)
         headlines = ["" for i in range(6)]
         for index, row in enumerate(children):
+            loguru.logger.info(row)
             element_1, element_2 = row.findChildren("div", class_ = "col-sm-5 most-read-item")
             headline_1 = element_1.findChildren("a")[0].text
             headline_2 = element_2.findChildren("a")[0].text
             headlines[index] = headline_1
             headlines[index + 3] = headline_2
-        data_point = headlines
         loguru.logger.info(f"Data point: {headlines}")
-        return data_point
+        return headlines
 
 
 if __name__ == "__main__":
