@@ -1,6 +1,6 @@
 """
 Scrapes a headline from The Daily Pennsylvanian website and saves it to a 
-JSON file that tracks headlines over time.
+JSON file that tracks featured headlines over time.
 """
 
 import os
@@ -12,13 +12,21 @@ import bs4
 import requests
 import loguru
 
+def check_row_featured(row: bs4.Tag) -> bool:
+    inner_div = row.find("div")
+    if inner_div == None:
+        return False
+    heading = inner_div.find("h3")
+    if heading == None:
+        return False
+    return heading.text == "Featured"
 
 def scrape_data_point():
     """
-    Scrapes the main headline from The Daily Pennsylvanian home page.
+    Scrapes the featured article titles/links from The Daily Pennsylvanian home page.
 
     Returns:
-        str: The headline text if found, otherwise an empty string.
+        list[dict]: A list of key-value pairs for each article, storing the link and title
     """
     req = requests.get("https://www.thedp.com/")
     loguru.logger.info(f"Request URL: {req.url}")
@@ -26,19 +34,25 @@ def scrape_data_point():
 
     if req.ok:
         soup = bs4.BeautifulSoup(req.text, "html.parser")
-        # Get all 6 most read headlines of the day
-        most_read_section = soup.find("span", id="mostRead")
-        children = most_read_section.findChildren("div" , recursive=False)
-        headlines = ["" for i in range(6)]
-        for index, row in enumerate(children):
-            loguru.logger.info(row)
-            element_1, element_2 = row.findChildren("div", class_ = "col-sm-5 most-read-item")
-            headline_1 = element_1.findChildren("a")[0].text
-            headline_2 = element_2.findChildren("a")[0].text
-            headlines[index] = headline_1
-            headlines[index + 3] = headline_2
-        loguru.logger.info(f"Data point: {headlines}")
-        return headlines
+        target_element = soup.find("a", class_="frontpage-link")
+        data_point = "" if target_element is None else target_element.text
+        # Get all featured headlines of the day
+        all_rows = soup.find_all("div", class_="row")
+        print(len(all_rows))
+        selected_row = None
+        for row in all_rows:
+            if check_row_featured(row):
+                selected_row = row
+                break
+        featured_article_metadata = []
+        if selected_row:
+            for article_div in selected_row.find("div").find("div").find_all("div"):
+                link = article_div.find("a", class_ = 'frontpage-link standard-link')
+                if not link:
+                    continue
+                featured_article_metadata.append({'title': link.text, 'link': link['href']})
+        loguru.logger.info(f"Data points: {featured_article_metadata}")
+        return featured_article_metadata
 
 
 if __name__ == "__main__":
