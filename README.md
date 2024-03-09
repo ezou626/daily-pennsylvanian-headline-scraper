@@ -20,6 +20,9 @@ The workflow defined in `.github/workflows/scrape.yaml` runs on a defined schedu
 4. Run the python script `script.py` to scrape data
 5. Commit any updated data files to the Git repository
 
+## Differences in Scraper from Template
+The scraper grabs the links and titles of the featured articles on the DP page every day according to the original schedule (once at 8 AM). All rows are checked and matched to see if they contain the "Featured" heading, and the appropriate row is selected. Then, the div is parsed to access the children link elements for the href attributes (URLs) and content (titles). These are then stored in a Python object to be logged to the data file. 
+
 ## Scheduling
 
 The workflow schedule is configured with [cron syntax](https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#schedule) to run:
