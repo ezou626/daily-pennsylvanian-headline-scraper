@@ -34,11 +34,8 @@ def scrape_data_point():
 
     if req.ok:
         soup = bs4.BeautifulSoup(req.text, "html.parser")
-        target_element = soup.find("a", class_="frontpage-link")
-        data_point = "" if target_element is None else target_element.text
         # Get all featured headlines of the day
         all_rows = soup.find_all("div", class_="row")
-        print(len(all_rows))
         selected_row = None
         for row in all_rows:
             if check_row_featured(row):
