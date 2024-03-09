@@ -20,15 +20,24 @@ def scrape_data_point():
     Returns:
         str: The headline text if found, otherwise an empty string.
     """
-    req = requests.get("https://www.thedp.com")
+    req = requests.get("https://www.thedp.com/")
     loguru.logger.info(f"Request URL: {req.url}")
     loguru.logger.info(f"Request status code: {req.status_code}")
 
     if req.ok:
         soup = bs4.BeautifulSoup(req.text, "html.parser")
-        target_element = soup.find("a", class_="frontpage-link")
-        data_point = "" if target_element is None else target_element.text
-        loguru.logger.info(f"Data point: {data_point}")
+        # Get all 6 most read headlines of the day
+        most_read_section = soup.find("span", id="mostRead")
+        children = most_read_section.findChildren("div" , recursive=False)
+        headlines = ["" for i in range(6)]
+        for index, row in enumerate(children):
+            element_1, element_2 = row.findChildren("div", class_ = "col-sm-5 most-read-item")
+            headline_1 = element_1.findChildren("a")[0].text
+            headline_2 = element_2.findChildren("a")[0].text
+            headlines[index] = headline_1
+            headlines[index + 3] = headline_2
+        data_point = headlines
+        loguru.logger.info(f"Data point: {headlines}")
         return data_point
 
 
