@@ -39,15 +39,17 @@ jobs:
           path: ~/.local/share/virtualenvs
           key: ${{ runner.os }}-pipenv-${{ hashFiles('**/Pipfile.lock') }}
 
+      - name: 🛠 Verify dependencies
+        id: verify
+        run: |
+          pipenv run pip list
+        continue-on-error: true
+
       - name: 🛠 Install dependencies
-        if: steps.cache-pipenv.outputs.cache-hit != 'true'
+        if: steps.cache-pipenv.outputs.cache-hit != 'true' || steps.verify.outcome != 'success'
         run: |
           touch Pipfile
           pipenv install --deploy --dev
-
-      - name: 🛠 Verify dependencies
-        run: |
-          pipenv run pip list
 
       - name: 🕵️‍♂️ Scrape content and output
         run: |
