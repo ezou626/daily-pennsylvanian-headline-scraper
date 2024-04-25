@@ -45,6 +45,10 @@ jobs:
           touch Pipfile
           pipenv install --deploy --dev
 
+      - name: 🛠 Verify dependencies
+        run: |
+          pipenv run pip list
+
       - name: 🕵️‍♂️ Scrape content and output
         run: |
           pipenv run python ./script.py
