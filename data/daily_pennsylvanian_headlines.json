@@ -598,5 +598,28 @@
       "2024-05-08 04:08PM",
       []
     ]
+  ],
+  "2024-5-9": [
+    [
+      "2024-05-09 04:08PM",
+      [
+        {
+          "title": "Penn implements 'added security' for 2024 Commencement, removes details about student procession",
+          "link": "https://www.thedp.com/article/2024/05/penn-commencement-security-updates"
+        },
+        {
+          "title": "Board of advisors of Katz Center for Judaic Studies asks Penn to end encampment to 'restore order'",
+          "link": "https://www.thedp.com/article/2024/05/penn-letter-katz-center-jameson-encampment"
+        },
+        {
+          "title": "Penn seeks discipline against nine encampment members, declines city presence at negotiations",
+          "link": "https://www.thedp.com/article/2024/05/penn-discipline-encampment-nine-negotiations-krasner-krajewski"
+        },
+        {
+          "title": "Students suing Penn over antisemitism response allege 'hostility' from encampment in new filing",
+          "link": "https://www.thedp.com/article/2024/05/penn-lawsuit-antisemitism-new-declarations-encampment"
+        }
+      ]
+    ]
   ]
 }
